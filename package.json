@@ -1,0 +1,15 @@
+{
+  "name": "interaction",
+  "version": "1.0.0",
+  "main": "lib/interaction.js",
+  "author": "Jason Nelson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carbon/interaction.git"
+  },
+  "bugs": {
+    "url": "https://github.com/carbon/interaction/issues"
+  },
+  "homepage": "https://github.com/carbon/interaction#readme"
+}
