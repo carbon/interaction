@@ -12,7 +12,7 @@ module Carbon {
       
     observers = [ ];
     
-    drawer: CanvasDrawer;
+    drawer: InteractionDrawer;
    
     path = [ ];
     clicks = [ ];
@@ -74,7 +74,7 @@ module Carbon {
   
       if (this.enableDraw) {
         
-        if (!this.drawer) this.drawer = new CanvasDrawer();
+        if (!this.drawer) this.drawer = new InteractionDrawer();
         
         this.drawer.draw(this);
       }
@@ -90,23 +90,6 @@ module Carbon {
         keystrokes : this.keystrokes
       };
     }
-  
-    ease(t: number, b: number, c: number, d: number) : number {
-      // // t: current time, b: begInnIng value, c: change In value, d: duration
-      // http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm
-  
-      // cubic
-  
-      var tc = (t /= d) * t* t;
-  
-      return b + c * (tc);
-    }
-  
-    getValue(point) {
-      let value = point[2] / this.elapsed;
-  
-      return this.ease(value, 0, 1, 1);
-    }
   }
   
   export class InteractionDrawer {
@@ -115,7 +98,7 @@ module Carbon {
      
      scale = 1;
      
-     constructor(element: HTMLCanvasElement) {
+     constructor(element?: HTMLCanvasElement) {
         if (element === undefined) {          
           element = document.createElement('canvas');
         
@@ -146,7 +129,7 @@ module Carbon {
       var last;
   
       for (var a of interaction.path) {
-        let value = interaction.getValue(a);
+        let value = this.getValue(a, interaction);
   
         ctx.strokeStyle = 'rgba(255, 255, 255,' +  value + ')';
       
@@ -170,7 +153,7 @@ module Carbon {
       let color = '#65cf80';
       
       for (var a of interaction.keystrokes) {
-        let value = interaction.getValue(a);
+        let value = this.getValue(a, interaction);
         let size = (value * 5) + 3;  
   
         ctx.fillStyle = 'rgba(0, 255, 0,' +  value + ')' ;
@@ -182,7 +165,7 @@ module Carbon {
       }
   
       for (var a of interaction.clicks) {
-        let value = interaction.getValue(a);
+        let value = this.getValue(a, interaction);
         let size = (value * 10) + 5;
         
         ctx.beginPath();
@@ -192,6 +175,23 @@ module Carbon {
         ctx.fillStyle = 'rgba(255, 0, 0,' +  value + ')' ;      
         ctx.fill();
       }
+    }
+    
+    ease(t: number, b: number, c: number, d: number) : number {
+      // // t: current time, b: begInnIng value, c: change In value, d: duration
+      // http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm
+  
+      // cubic
+  
+      var tc = (t /= d) * t* t;
+  
+      return b + c * (tc);
+    }
+  
+    getValue(point, interaction: Interaction) {
+      let value = point[2] / interaction.elapsed;
+  
+      return this.ease(value, 0, 1, 1);
     }
   }
 }
