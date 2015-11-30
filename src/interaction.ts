@@ -1,6 +1,5 @@
 module Carbon { 
   export class Interaction {
-     
     hasData = false;
     enableDraw = false;
     maxPoints = 100;
@@ -92,7 +91,7 @@ module Carbon {
       };
     }
   
-    ease(t, b, c, d) : number {
+    ease(t: number, b: number, c: number, d: number) : number {
       // // t: current time, b: begInnIng value, c: change In value, d: duration
       // http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm
   
@@ -116,16 +115,11 @@ module Carbon {
      
      scale = 1;
      
-     constructor() { 
-       
-     }
-     
-     draw (interaction: Interaction) {
-      if (!this.cxt) {      
+     constructor() {
         let element = document.createElement('canvas');
        
-        element.width = interaction.width * this.scale;
-        element.height = interaction.height * this.scale;
+        element.width = 100;
+        element.height = 100;
         
         element.style.position = 'fixed';
         element.style.top = '0';
@@ -134,18 +128,16 @@ module Carbon {
         element.style.zIndex = '1000';
   
         document.body.appendChild(element);
-
-        var ctx = element.getContext('2d');
-  
-        // ctx.fillRect(25,25,100,100);
-  
-        ctx.canvas.width  = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-  
-        this.cxt = ctx;
-      }
-  
+     
+        this.cxt = element.getContext('2d');
+        this.element = element; 
+     }
+     
+     draw (interaction: Interaction) {  
       var ctx = this.cxt;
+      
+      this.element.width  = interaction.width * this.scale;
+      this.element.height = interaction.height * this.scale;
       
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   
@@ -173,10 +165,11 @@ module Carbon {
         last = a;
       }
     
+      let color = '#65cf80';
+      
       for (var a of interaction.keystrokes) {
         let value = interaction.getValue(a);
-        let size = (value * 5) + 3;
-        let color = '#65cf80';
+        let size = (value * 5) + 3;  
   
         ctx.fillStyle = 'rgba(0, 255, 0,' +  value + ')' ;
   
