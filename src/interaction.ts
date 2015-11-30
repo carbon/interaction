@@ -109,26 +109,28 @@ module Carbon {
     }
   }
   
-  export class CanvasDrawer {
+  export class InteractionDrawer {
      element: HTMLCanvasElement;
      cxt: CanvasRenderingContext2D;
      
      scale = 1;
      
-     constructor() {
-        let element = document.createElement('canvas');
-       
-        element.width = 100;
-        element.height = 100;
+     constructor(element: HTMLCanvasElement) {
+        if (element === undefined) {          
+          element = document.createElement('canvas');
         
-        element.style.position = 'fixed';
-        element.style.top = '0';
-        element.style.left = '0';
-        element.style.pointerEvents = 'none';
-        element.style.zIndex = '1000';
-  
-        document.body.appendChild(element);
-     
+          element.width = 100;
+          element.height = 100;
+          
+          element.style.position = 'fixed';
+          element.style.top = '0';
+          element.style.left = '0';
+          element.style.pointerEvents = 'none';
+          element.style.zIndex = '1000';
+    
+          document.body.appendChild(element);
+        }
+        
         this.cxt = element.getContext('2d');
         this.element = element; 
      }
