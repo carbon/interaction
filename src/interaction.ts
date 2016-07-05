@@ -21,11 +21,11 @@ module Carbon {
     constructor() { }
   
     start() {
-      this.started =  (new Date() - 0);
+      this.started = Date.now();
       
-      this.observers.push(Carbon.observe(document.body, 'click', this.onClick.bind(this)));
-      this.observers.push(Carbon.observe(document.body, 'keypress', this.onKeyPress.bind(this)));
-      this.observers.push(Carbon.observe(document.body, 'mousemove', this.onMouseMove.bind(this).throttle(100)));
+      this.observers.push(_.observe(document.body, 'click', this.onClick.bind(this)));
+      this.observers.push(_.observe(document.body, 'keypress', this.onKeyPress.bind(this)));
+      this.observers.push(_.observe(document.body, 'mousemove', this.onMouseMove.bind(this).throttle(100)));
 
       this.width = window.innerWidth;
       this.height = window.innerHeight;
@@ -44,25 +44,30 @@ module Carbon {
         this.path.shift();
       }
   
-      this.path.push([ e.pageX, e.pageY, new Date() - this.started ]);
+      this.path.push([ e.pageX, e.pageY, Date.now() - this.started ]);
   
       this.onUpdate();
     }
   
     onKeyPress(e) {
-      var position = $(e.target).offset();
-  
-      if (e.target.value) {
-        position.left = position.left + e.target.value.length * 6;
+      var target = <HTMLInputElement>e.target;
+      var position = target.getBoundingClientRect();
+
+      var left = position.left;
+
+      var startPos = target.selectionStart;
+
+      if (startPos) {
+        left += startPos * 6;
       }
-  
-      this.keystrokes.push([ parseInt(position.left), parseInt(position.top), new Date() - this.started ]);
+
+      this.keystrokes.push([ left, position.top, Date.now() - this.started ]);
   
       this.onUpdate();
     }
   
     onClick(e) {
-      this.clicks.push([ e.pageX, e.pageY, new Date() - this.started ]);
+      this.clicks.push([ e.pageX, e.pageY, Date.now() - this.started ]);
       
       this.onUpdate();
     }
@@ -70,7 +75,7 @@ module Carbon {
     onUpdate() {
       this.hasData = true;
       
-      this.elapsed = new Date() - this.started;
+      this.elapsed = Date.now() - this.started;
   
       if (this.enableDraw) {
         
@@ -86,7 +91,7 @@ module Carbon {
         width      : this.width,
         height     : this.height,
         clicks     : this.clicks,
-        path      : this.path,
+        path       : this.path,
         keystrokes : this.keystrokes
       };
     }
@@ -183,7 +188,7 @@ module Carbon {
   
       // cubic
   
-      var tc = (t /= d) * t* t;
+      let tc = (t /= d) * t* t;
   
       return b + c * (tc);
     }

@@ -8,6 +8,7 @@
     "outDir": "lib/"
   },
   "files": [
-    "src/interaction.ts"
+    "src/interaction.ts",
+    "src/_.d.ts"
   ]
 }
