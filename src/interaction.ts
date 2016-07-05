@@ -55,10 +55,8 @@ module Carbon {
 
       var left = position.left;
 
-      var startPos = target.selectionStart;
-
-      if (startPos) {
-        left += startPos * 6;
+      if (target.value.length) {
+        left += target.value.length * 6;
       }
 
       this.keystrokes.push([ left, position.top, Date.now() - this.started ]);
